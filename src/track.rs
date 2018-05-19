@@ -1,16 +1,16 @@
-use std::net::IpAddr;
+use std::net::Ipv4Addr;
 use std::collections::HashMap;
 use std::collections::HashSet;
 
-type IpSet = HashSet<IpAddr>;
+type IpSet = HashSet<Ipv4Addr>;
 type FailCounts = [u32; 4];
 type Port = u16;
 type Protocol = u8;
 type PortIpSet = HashMap<Port, Box<IpSet>>;
-type IpFailCounts = HashMap<IpAddr, FailCounts>;
+type IpFailCounts = HashMap<Ipv4Addr, FailCounts>;
 
 pub struct Tracker {
-    tracker_ip: IpAddr,
+    tracker_ip: Ipv4Addr,
     total_fail_counts: FailCounts,
 
     ip_fail_counts: IpFailCounts,
@@ -34,7 +34,7 @@ fn __get_port_type(port: Port, proto: Protocol) {
 }
 
 impl Tracker {
-    pub fn new(scanner: IpAddr) -> Tracker {
+    pub fn new(scanner: Ipv4Addr) -> Tracker {
         Tracker {
             tracker_ip: scanner,
             total_fail_counts: [0, 0, 0, 0],
@@ -47,19 +47,19 @@ impl Tracker {
         }
     }
 
-    fn __tcp_sm_list_add(self, ip: IpAddr, port: Port) {}
+    fn __tcp_sm_list_add(self, ip: Ipv4Addr, port: Port) {}
 
-    fn __udp_sm_list_add(self, ip: IpAddr, port: Port) {}
+    fn __udp_sm_list_add(self, ip: Ipv4Addr, port: Port) {}
 
-    fn __other_list_append(self, ip: IpAddr, port: Port) {}
+    fn __other_list_append(self, ip: Ipv4Addr, port: Port) {}
 
-    fn __icmp_list_append(self, ip: IpAddr) {}
+    fn __icmp_list_append(self, ip: Ipv4Addr) {}
 
     fn __total_failcounts_add(self, port_type: u8) {}
 
-    fn __ip_pool_append(self, ip: IpAddr, port_type: u8) {}
+    fn __ip_pool_append(self, ip: Ipv4Addr, port_type: u8) {}
 
-    pub fn track_scanned(self, ip: IpAddr, port: Port, proto: Protocol) {
+    pub fn track_scanned(self, ip: Ipv4Addr, port: Port, proto: Protocol) {
         let port_type = __get_port_type(port, proto);
     }
 

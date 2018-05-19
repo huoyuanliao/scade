@@ -9,6 +9,7 @@ extern crate pcap;
 use std::net::Ipv4Addr;
 use std::path::Path;
 use pcap::Capture;
+use scade::track::Tracker;
 
 use pnet::packet::Packet;
 use pnet::packet::ethernet::{EthernetPacket, EtherTypes};
@@ -25,9 +26,9 @@ type Port = u16;
 
 fn process_packet(p: pcap::Packet) {
     if let Some(eth) = EthernetPacket::new(&p) {
-        let mut scanner: Option<Ipv4Addr>;
-        let mut scanned: Option<Ipv4Addr>;
-        let mut scanned_port: Option<Port>;
+        let mut scanner: Option<Ipv4Addr> = None;
+        let mut scanned: Option<Ipv4Addr> = None;
+        let mut scanned_port: Option<Port> = None;
         let mut protocol: Option<IpNextHeaderProtocol> = None;
         let ether_type = eth.get_ethertype();
 
@@ -38,7 +39,7 @@ fn process_packet(p: pcap::Packet) {
                     scanner = Some(arp.get_sender_proto_addr());
                     scanned = Some(arp.get_target_proto_addr());
                     scanned_port = Some(0);
-                    //255 as arp protocol
+                    // 255 as arp protocol
                     protocol = Some(IpNextHeaderProtocol(255));
                 }
             }
@@ -68,10 +69,17 @@ fn process_packet(p: pcap::Packet) {
                 }
             }
         }
-        //return if not acceptable packet
-        if protocol == None {
-          return
+        // return if not acceptable packet
+        if scanned_port == None {
+            return;
         }
+        let scanned = scanned.unwrap();
+        let scanned_port = scanned_port.unwrap();
+        let protocol: u8 = protocol.unwrap().0;
+        let mut tracker = Tracker::new(scanner.unwrap());
+        tracker.track_scanned(scanned,
+                              scanned_port,
+                              protocol);
         
     }
 }
