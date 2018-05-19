@@ -4,3 +4,6 @@ version = "0.1.0"
 authors = ["liaozy <798389647@qq.com>"]
 
 [dependencies]
+pnet = "*"
+pcap = "*"
+libc = "*"
