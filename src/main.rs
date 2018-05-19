@@ -6,7 +6,7 @@ extern crate scade;
 extern crate pnet;
 extern crate pcap;
 
-use std::net::IpAddr;
+use std::net::Ipv4Addr;
 use std::path::Path;
 use pcap::Capture;
 
@@ -17,49 +17,62 @@ use pnet::packet::ipv4::Ipv4Packet;
 use pnet::packet::tcp::TcpPacket;
 use pnet::packet::udp::UdpPacket;
 use pnet::packet::icmp::IcmpPacket;
+use pnet::packet::icmp::IcmpTypes;
 use pnet::packet::arp::ArpPacket;
 use pnet::packet::arp::ArpOperations;
+
 type Port = u16;
 
 fn process_packet(p: pcap::Packet) {
     if let Some(eth) = EthernetPacket::new(&p) {
-        let mut scanner: IpAddr;
-        let mut scanned: IpAddr;
-        let mut scanned_port: Port;
-        let mut protocol: IpNextHeaderProtocol;
+        let mut scanner: Option<Ipv4Addr>;
+        let mut scanned: Option<Ipv4Addr>;
+        let mut scanned_port: Option<Port>;
+        let mut protocol: Option<IpNextHeaderProtocol> = None;
         let ether_type = eth.get_ethertype();
 
-        //arp only handle request
+        // arp only handle request
         if let EtherTypes::Arp = ether_type {
-          if let Some(arp) = ArpPacket::new(eth.payload()) {
-            if arp.get_operation() == ArpOperations::Request {
-              
+            if let Some(arp) = ArpPacket::new(eth.payload()) {
+                if arp.get_operation() == ArpOperations::Request {
+                    scanner = Some(arp.get_sender_proto_addr());
+                    scanned = Some(arp.get_target_proto_addr());
+                    scanned_port = Some(0);
+                    //255 as arp protocol
+                    protocol = Some(IpNextHeaderProtocol(255));
+                }
             }
-          }
         }
-        //tcp/udp/icmp, icmp only handle request
+        // tcp/udp/icmp, icmp only handle request
         if let EtherTypes::Ipv4 = ether_type {
             if let Some(ip) = Ipv4Packet::new(eth.payload()) {
-                scanner = std::net::IpAddr::V4(ip.get_source());
-                scanned = std::net::IpAddr::V4(ip.get_destination());
-                protocol = ip.get_next_level_protocol();
-                if let IpNextHeaderProtocols::Tcp = protocol {
+                scanner = Some(ip.get_source());
+                scanned = Some(ip.get_destination());
+                protocol = Some(ip.get_next_level_protocol());
+                if let Some(IpNextHeaderProtocols::Tcp) = protocol {
                     if let Some(tcp) = TcpPacket::new(ip.payload()) {
-                        scanned_port = tcp.get_destination();
+                        scanned_port = Some(tcp.get_destination());
                     }
                 }
-                if let IpNextHeaderProtocols::Udp = protocol {
+                if let Some(IpNextHeaderProtocols::Udp) = protocol {
                     if let Some(udp) = UdpPacket::new(ip.payload()) {
-                        scanned_port = udp.get_destination();
+                        scanned_port = Some(udp.get_destination());
                     }
                 }
-                if let IpNextHeaderProtocols::Icmp = protocol {
+                if let Some(IpNextHeaderProtocols::Icmp) = protocol {
                     if let Some(icmp) = IcmpPacket::new(ip.payload()) {
-                        scanned_port = 0;
+                        if icmp.get_icmp_type() == IcmpTypes::EchoRequest {
+                            scanned_port = Some(0);
+                        }
                     }
                 }
             }
         }
+        //return if not acceptable packet
+        if protocol == None {
+          return
+        }
+        
     }
 }
 
