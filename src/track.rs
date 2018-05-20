@@ -9,14 +9,6 @@ use types::Protocol;
 use smport_list::service_port_init;
 use smport_list::malware_port_init;
 
-
-
-pub fn tracker_init() -> (PortSet, PortSet) {
-    let service_ports = service_port_init();
-    let malware_ports = malware_port_init();
-    (service_ports, malware_ports)
-}
-
 pub struct Tracker {
     tracker_ip: Ipv4Addr,
     total_fail_counts: FailCounts,
