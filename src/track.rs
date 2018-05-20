@@ -6,8 +6,8 @@ use types::Port;
 use types::IpSet;
 use types::IpFailCounts;
 use types::Protocol;
-use smport_list::service_port_init;
-use smport_list::malware_port_init;
+use smport_list::SERVICE_PORTS;
+use smport_list::MALWARE_PORTS;
 
 pub struct Tracker {
     tracker_ip: Ipv4Addr,

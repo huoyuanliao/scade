@@ -6,3 +6,4 @@ authors = ["liaozy <798389647@qq.com>"]
 [dependencies]
 pnet = "*"
 pcap = "*"
+lazy_static = "*"
