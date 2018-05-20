@@ -10,9 +10,8 @@ type IpSet = HashSet<Ipv4Addr>;
 type FailCounts = [u32; 4];
 pub type Port = u16;
 type Protocol = u8;
-pub type PortIpSet = HashMap<Port, IpSet>;
+type PortIpSet = HashMap<Port, IpSet>;
 type IpFailCounts = HashMap<Ipv4Addr, FailCounts>;
-
 
 pub fn tracker_init() {
     ServicePortList::new();
