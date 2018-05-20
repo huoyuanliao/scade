@@ -6,6 +6,7 @@ use types::Port;
 use types::IpSet;
 use types::IpFailCounts;
 use types::Protocol;
+use types::PortType;
 use smport_list::SERVICE_PORTS;
 use smport_list::MALWARE_PORTS;
 
@@ -21,23 +22,23 @@ pub struct Tracker {
     udp_sm_list: PortIpSet,
 }
 
-fn __get_port_type(port: Port, proto: Protocol) -> () {
+fn __get_port_type(port: Port, proto: Protocol) -> PortType {
     if proto == 0x6 || proto == 0x11 {
-
+        if SERVICE_PORTS.contains(&port) {
+            return PortType::SERVICE;
+        } else if MALWARE_PORTS.contains(&port) {
+            return PortType::MALWARE;
+        } else {
+            //other's tcp-udp
+            return PortType::OTHER;
+        }
+    } else if proto == 0x1 {
+        //icmp
+        return PortType::ZERO;
+    } else {
+        //arp
+        return PortType::OTHER;
     }
-    // if proto == 0x6 || proto == 0x11 {
-    // if ServicePortList.contains_key(&port) {
-    // return PortType::SERVICE;
-    // } else if MalwarePortList.contains_key(&port) {
-    // return PortType::MALWARE;
-    // }
-    // return PortType::OTHER;
-    // } else if proto == 0x1 {
-    // return PortType::ZERO;
-    // } else {
-    // return PortType::OTHER;
-    // }
-    //
 }
 
 impl Tracker {
