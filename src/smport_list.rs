@@ -2,30 +2,20 @@ use std::collections::HashSet;
 use track::Port;
 
 type PortSet = HashSet<Port>;
-
-pub struct ServicePortList(PortSet);
-pub struct MalWarePortList(PortSet);
-
-impl ServicePortList {
-    pub fn new() -> Self {
-        ServicePortList(PortSet::new())
+static SERVICE_PORTS_LIST: [Port; 3] = [53, 80, 8080];
+static MALWARE_PORTS_LIST: [Port; 1] = [53];
+pub fn service_port_init() -> PortSet {
+    let mut service_ports = PortSet::new();
+    for port in SERVICE_PORTS_LIST.iter() {
+        service_ports.insert(*port);
     }
-    pub fn contains_port(&self, port: &Port) -> bool {
-        return self.0.contains(port);
-    }
-    pub fn add_port(&mut self, port: Port) -> bool {
-        self.0.insert(port)
-    }
+    service_ports
 }
 
-impl MalWarePortList {
-    pub fn new() -> Self {
-        MalWarePortList(PortSet::new())
+pub fn malware_port_init() -> PortSet {
+    let mut malware_ports = PortSet::new();
+    for port in MALWARE_PORTS_LIST.iter() {
+        malware_ports.insert(*port);
     }
-    pub fn contains_port(&self, port: &Port) -> bool {
-        return self.0.contains(port);
-    }
-    pub fn add_port(&mut self, port: Port) -> bool {
-        self.0.insert(port)
-    }
+    malware_ports
 }

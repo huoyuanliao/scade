@@ -3,8 +3,8 @@ use std::collections::HashMap;
 use std::collections::HashSet;
 use track_type::PortType;
 use smport_list;
-use smport_list::ServicePortList;
-use smport_list::MalWarePortList;
+use smport_list::service_port_init;
+use smport_list::malware_port_init;
 
 type IpSet = HashSet<Ipv4Addr>;
 type FailCounts = [u32; 4];
@@ -14,8 +14,8 @@ type PortIpSet = HashMap<Port, IpSet>;
 type IpFailCounts = HashMap<Ipv4Addr, FailCounts>;
 
 pub fn tracker_init() {
-    ServicePortList::new();
-    MalWarePortList::new();
+    service_port_init();
+    malware_port_init();
 }
 
 pub struct Tracker {
