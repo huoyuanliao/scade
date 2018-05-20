@@ -55,9 +55,16 @@ impl Tracker {
         }
     }
 
-    fn __tcp_sm_list_add(&mut self, ip: Ipv4Addr, port: Port) {}
+    fn __tcp_sm_list_add(&mut self, ip: Ipv4Addr, port: Port) {
+        // self.tcp_sm_list.insert(ip, port);
+        let ipset = self.tcp_sm_list.entry(port).or_insert(IpSet::new());
+        ipset.insert(ip);
+    }
 
-    fn __udp_sm_list_add(&mut self, ip: Ipv4Addr, port: Port) {}
+    fn __udp_sm_list_add(&mut self, ip: Ipv4Addr, port: Port) {
+        let ipset = self.udp_sm_list.entry(port).or_insert(IpSet::new());
+        ipset.insert(ip);
+    }
 
     fn __other_list_append(self, ip: Ipv4Addr, port: Port) {}
 
@@ -78,14 +85,14 @@ impl Tracker {
 
         // maintain icmp
         match port_type {
-            PortType::SERVICE => {
+            PortType::SERVICE | PortType::MALWARE => {
                 if proto == 0x6 {
                     self.__tcp_sm_list_add(ip, port);
                 } else if proto == 0x11 {
                     self.__udp_sm_list_add(ip, port);
                 }
             }
-            PortType::MALWARE => {}
+
             PortType::ZERO => {
                 self.__icmp_list_append(ip);
             }
