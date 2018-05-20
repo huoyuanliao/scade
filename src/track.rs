@@ -1,21 +1,20 @@
 use std::net::Ipv4Addr;
-use std::collections::HashMap;
-use std::collections::HashSet;
-use track_type::PortType;
-use smport_list;
+use types::PortSet;
+use types::FailCounts;
+use types::PortIpSet;
+use types::Port;
+use types::IpSet;
+use types::IpFailCounts;
+use types::Protocol;
 use smport_list::service_port_init;
 use smport_list::malware_port_init;
 
-type IpSet = HashSet<Ipv4Addr>;
-type FailCounts = [u32; 4];
-pub type Port = u16;
-type Protocol = u8;
-type PortIpSet = HashMap<Port, IpSet>;
-type IpFailCounts = HashMap<Ipv4Addr, FailCounts>;
 
-pub fn tracker_init() {
-    service_port_init();
-    malware_port_init();
+
+pub fn tracker_init() -> (PortSet, PortSet) {
+    let service_ports = service_port_init();
+    let malware_ports = malware_port_init();
+    (service_ports, malware_ports)
 }
 
 pub struct Tracker {

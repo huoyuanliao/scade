@@ -1,9 +1,8 @@
-use std::collections::HashSet;
-use track::Port;
+use types::PortSet;
+use config::SERVICE_PORTS_LIST;
+use config::MALWARE_PORTS_LIST;
 
-type PortSet = HashSet<Port>;
-static SERVICE_PORTS_LIST: [Port; 3] = [53, 80, 8080];
-static MALWARE_PORTS_LIST: [Port; 1] = [53];
+
 pub fn service_port_init() -> PortSet {
     let mut service_ports = PortSet::new();
     for port in SERVICE_PORTS_LIST.iter() {
