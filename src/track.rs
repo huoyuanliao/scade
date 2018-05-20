@@ -29,14 +29,14 @@ fn __get_port_type(port: Port, proto: Protocol) -> PortType {
         } else if MALWARE_PORTS.contains(&port) {
             return PortType::MALWARE;
         } else {
-            //other's tcp-udp
+            // other's tcp-udp
             return PortType::OTHER;
         }
     } else if proto == 0x1 {
-        //icmp
+        // icmp
         return PortType::ZERO;
     } else {
-        //arp
+        // arp
         return PortType::OTHER;
     }
 }
@@ -61,7 +61,9 @@ impl Tracker {
 
     fn __other_list_append(self, ip: Ipv4Addr, port: Port) {}
 
-    fn __icmp_list_append(self, ip: Ipv4Addr) {}
+    fn __icmp_list_append(&mut self, ip: Ipv4Addr) {
+        self.port_icmp_list.insert(ip);
+    }
 
     fn __total_failcounts_add(&mut self, port_type: PortType) {
         self.total_fail_counts[port_type as usize] += 1;
@@ -71,8 +73,19 @@ impl Tracker {
 
     pub fn track_scanned(&mut self, ip: Ipv4Addr, port: Port, proto: Protocol) {
         let port_type = __get_port_type(port, proto);
-        //calculate total failcounts 
+        // calculate total failcounts
         self.__total_failcounts_add(port_type);
+
+        // maintain icmp
+        match port_type {
+            PortType::SERVICE => {}
+            PortType::MALWARE => {}
+            PortType::ZERO => {
+                self.__icmp_list_append(ip);
+            }
+            PortType::OTHER => {}
+
+        }
     }
 
     pub fn get_ip_failcounts_amount(self) {

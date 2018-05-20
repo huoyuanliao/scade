@@ -10,6 +10,7 @@ pub type PortIpSet = HashMap<Port, IpSet>;
 pub type IpSet = HashSet<Ipv4Addr>;
 pub type IpFailCounts = HashMap<Ipv4Addr, FailCounts>;
 
+#[derive(Copy, Clone)]
 pub enum PortType {
     SERVICE = 0,
     MALWARE = 1,
