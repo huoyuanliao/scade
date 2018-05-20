@@ -63,12 +63,16 @@ impl Tracker {
 
     fn __icmp_list_append(self, ip: Ipv4Addr) {}
 
-    fn __total_failcounts_add(self, port_type: u8) {}
+    fn __total_failcounts_add(&mut self, port_type: PortType) {
+        self.total_fail_counts[port_type as usize] += 1;
+    }
 
     fn __ip_pool_append(self, ip: Ipv4Addr, port_type: u8) {}
 
-    pub fn track_scanned(self, ip: Ipv4Addr, port: Port, proto: Protocol) {
+    pub fn track_scanned(&mut self, ip: Ipv4Addr, port: Port, proto: Protocol) {
         let port_type = __get_port_type(port, proto);
+        //calculate total failcounts 
+        self.__total_failcounts_add(port_type);
     }
 
     pub fn get_ip_failcounts_amount(self) {
