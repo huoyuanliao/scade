@@ -77,10 +77,8 @@ fn process_packet(p: pcap::Packet) {
         let scanned_port = scanned_port.unwrap();
         let protocol: u8 = protocol.unwrap().0;
         let mut tracker = Tracker::new(scanner.unwrap());
-        tracker.track_scanned(scanned,
-                              scanned_port,
-                              protocol);
-        
+        tracker.track_scanned(scanned, scanned_port, protocol);
+
     }
 }
 

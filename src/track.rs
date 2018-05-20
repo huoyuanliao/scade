@@ -1,13 +1,23 @@
 use std::net::Ipv4Addr;
 use std::collections::HashMap;
 use std::collections::HashSet;
+use track_type::PortType;
+use smport_list;
+use smport_list::ServicePortList;
+use smport_list::MalWarePortList;
 
 type IpSet = HashSet<Ipv4Addr>;
 type FailCounts = [u32; 4];
-type Port = u16;
+pub type Port = u16;
 type Protocol = u8;
-type PortIpSet = HashMap<Port, Box<IpSet>>;
+pub type PortIpSet = HashMap<Port, IpSet>;
 type IpFailCounts = HashMap<Ipv4Addr, FailCounts>;
+
+
+pub fn tracker_init() {
+    ServicePortList::new();
+    MalWarePortList::new();
+}
 
 pub struct Tracker {
     tracker_ip: Ipv4Addr,
@@ -21,16 +31,23 @@ pub struct Tracker {
     udp_sm_list: PortIpSet,
 }
 
-fn __get_port_type(port: Port, proto: Protocol) {
-    if proto == 0x6 {
-        // tcp
-    } else if proto == 0x11 {
-        // udp
-    } else if proto == 0x1 {
-        // icmp
-    } else {
-        // other
+fn __get_port_type(port: Port, proto: Protocol) -> () {
+    if proto == 0x6 || proto == 0x11 {
+
     }
+    // if proto == 0x6 || proto == 0x11 {
+    // if ServicePortList.contains_key(&port) {
+    // return PortType::SERVICE;
+    // } else if MalwarePortList.contains_key(&port) {
+    // return PortType::MALWARE;
+    // }
+    // return PortType::OTHER;
+    // } else if proto == 0x1 {
+    // return PortType::ZERO;
+    // } else {
+    // return PortType::OTHER;
+    // }
+    //
 }
 
 impl Tracker {
