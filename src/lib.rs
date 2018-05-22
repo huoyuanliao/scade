@@ -13,7 +13,6 @@ mod outbound;
 mod track;
 pub use track::Tracker;
 pub use config::Config;
-pub use config::config_init;
 pub use inbound::inbound_check;
 pub use inbound::inbound_alert_check;
 
