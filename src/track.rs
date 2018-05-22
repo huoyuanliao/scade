@@ -1,5 +1,4 @@
 use std::net::Ipv4Addr;
-use types::PortSet;
 use types::FailCounts;
 use types::PortIpSet;
 use types::Port;

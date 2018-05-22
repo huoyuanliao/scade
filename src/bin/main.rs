@@ -1,7 +1,5 @@
-#![allow(unused_imports)]
 #![allow(unused_variables)]
 #![allow(dead_code)]
-#![allow(unused_assignments)]
 extern crate scade;
 extern crate pnet;
 extern crate pcap;
