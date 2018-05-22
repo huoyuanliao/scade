@@ -10,11 +10,12 @@ mod smport_list;
 mod config;
 mod inbound;
 mod outbound;
-pub mod track;
+mod track;
+pub use track::Tracker;
 pub use config::Config;
 pub use config::config_init;
-pub use inbound::inbound_get_tracker;
-pub use inbound::inbound_tracker_check;
+pub use inbound::inbound_check;
+pub use inbound::inbound_alert_check;
 
-pub use outbound::outbound_get_tracker;
-pub use outbound::outbound_tracker_check;
+pub use outbound::outbound_check;
+pub use outbound::outbound_alert_check;

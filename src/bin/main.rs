@@ -1,5 +1,7 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
+#![allow(unused_assignments)]
+#![allow(unused_imports)]
 extern crate scade;
 extern crate pnet;
 extern crate pcap;
@@ -7,7 +9,9 @@ extern crate pcap;
 use std::net::Ipv4Addr;
 use std::path::Path;
 use pcap::Capture;
-use scade::track::Tracker;
+use scade::Tracker;
+use scade::inbound_check;
+use scade::inbound_alert_check;
 
 use pnet::packet::Packet;
 use pnet::packet::ethernet::{EthernetPacket, EtherTypes};
@@ -74,9 +78,11 @@ fn process_packet(p: pcap::Packet) {
         let scanned = scanned.unwrap();
         let scanned_port = scanned_port.unwrap();
         let protocol: u8 = protocol.unwrap().0;
-        let mut tracker = Tracker::new(scanner.unwrap());
-        tracker.track_scanned(scanned, scanned_port, protocol);
 
+
+        // let mut tracker = Tracker::new(scanner.unwrap());
+        // let mut tracker = inbound_get_tracker();
+        // tracker.track_scanned(scanned, scanned_port, protocol);
     }
 }
 
