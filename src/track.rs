@@ -66,7 +66,10 @@ impl Tracker {
         ipset.insert(ip);
     }
 
-    fn __other_list_append(self, ip: Ipv4Addr, port: Port) {}
+    fn __other_list_append(&mut self, ip: Ipv4Addr, port: Port) {
+        let ipset = self.port_other_list.entry(port).or_insert(IpSet::new());
+        ipset.insert(ip);
+    }
 
     fn __icmp_list_append(&mut self, ip: Ipv4Addr) {
         self.port_icmp_list.insert(ip);
@@ -92,12 +95,12 @@ impl Tracker {
                     self.__udp_sm_list_add(ip, port);
                 }
             }
-
             PortType::ZERO => {
                 self.__icmp_list_append(ip);
             }
-            PortType::OTHER => {}
-
+            PortType::OTHER => {
+                self.__other_list_append(ip, port);
+            }
         }
     }
 
