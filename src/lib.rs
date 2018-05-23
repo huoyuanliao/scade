@@ -2,6 +2,7 @@
 #![allow(dead_code)]
 extern crate pnet;
 extern crate pcap;
+extern crate regex;
 #[macro_use]
 extern crate lazy_static;
 

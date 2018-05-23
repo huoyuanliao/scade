@@ -7,3 +7,4 @@ authors = ["liaozy <798389647@qq.com>"]
 pnet = "*"
 pcap = "*"
 lazy_static = "*"
+regex = "0.2"

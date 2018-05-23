@@ -103,6 +103,9 @@ impl Tracker {
             PortType::OTHER => {
                 self.__other_list_append(ip, port);
             }
+            _ => {
+                // do nothing
+            }
         }
 
         self.__ip_pool_append(ip, port_type)

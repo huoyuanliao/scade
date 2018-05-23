@@ -16,4 +16,16 @@ pub enum PortType {
     MALWARE = 1,
     OTHER = 2,
     ZERO = 3,
+    GENERIC = 4,
+    NONE = 5,
 }
+
+#[derive(Copy, Clone)]
+pub enum IpSweep {
+    IPSweepNarrow = 0,
+    IPSweepModerate = 1,
+    IPSweepBroad = 2,
+    IPSweepNone = 3,
+}
+
+pub static TRIGGER_REG: &str = r"\s*(?:(\d+)=)?(\w+)\+(non-)?(\w+)\s*";
