@@ -1,5 +1,5 @@
-// #![allow(unused_variables)]
-// #![allow(dead_code)]
+#![allow(unused_variables)]
+#![allow(dead_code)]
 extern crate pnet;
 extern crate pcap;
 #[macro_use]

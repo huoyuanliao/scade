@@ -78,7 +78,10 @@ impl Tracker {
         self.total_fail_counts[port_type as usize] += 1;
     }
 
-    fn __ip_pool_append(self, ip: Ipv4Addr, port_type: u8) {}
+    fn __ip_pool_append(&mut self, ip: Ipv4Addr, port_type: PortType) {
+        let entry = self.ip_fail_counts.entry(ip).or_insert([0, 0, 0, 0]);
+        entry[port_type as usize] += 1;
+    }
 
     pub fn track_scanned(&mut self, ip: Ipv4Addr, port: Port, proto: Protocol) {
         let port_type = __get_port_type(port, proto);
@@ -101,6 +104,8 @@ impl Tracker {
                 self.__other_list_append(ip, port);
             }
         }
+
+        self.__ip_pool_append(ip, port_type)
     }
 
     pub fn get_ip_failcounts_amount(self) {
