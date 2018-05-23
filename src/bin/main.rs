@@ -9,9 +9,9 @@ extern crate pcap;
 use std::net::Ipv4Addr;
 use std::path::Path;
 use pcap::Capture;
-use scade::Tracker;
-use scade::inbound_check;
+use scade::inbound_scan;
 use scade::inbound_alert_check;
+use scade::Port;
 
 use pnet::packet::Packet;
 use pnet::packet::ethernet::{EthernetPacket, EtherTypes};
@@ -23,8 +23,6 @@ use pnet::packet::icmp::IcmpPacket;
 use pnet::packet::icmp::IcmpTypes;
 use pnet::packet::arp::ArpPacket;
 use pnet::packet::arp::ArpOperations;
-
-type Port = u16;
 
 fn process_packet(p: pcap::Packet) {
     if let Some(eth) = EthernetPacket::new(&p) {

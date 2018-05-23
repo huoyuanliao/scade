@@ -1,5 +1,5 @@
-#![allow(unused_variables)]
-#![allow(dead_code)]
+// #![allow(unused_variables)]
+// #![allow(dead_code)]
 extern crate pnet;
 extern crate pcap;
 #[macro_use]
@@ -11,10 +11,9 @@ mod config;
 mod inbound;
 mod outbound;
 mod track;
-pub use track::Tracker;
-pub use config::Config;
-pub use inbound::inbound_check;
+pub use types::Port;
+pub use inbound::inbound_scan;
 pub use inbound::inbound_alert_check;
 
-pub use outbound::outbound_check;
+pub use outbound::outbound_scan;
 pub use outbound::outbound_alert_check;
