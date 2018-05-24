@@ -1,4 +1,5 @@
 use regex::Regex;
+use regex::Match;
 
 use std::sync::Mutex;
 use std::collections::HashMap;
@@ -14,15 +15,17 @@ pub struct Trigger {
     catnum: u8,
     ipsweep: IpSweep,
     portfocus: PortType,
+    negative: bool,
     curpf: PortType,
 }
 
 impl Trigger {
-    pub fn new(catnum: u8, ips: IpSweep, pf: PortType) -> Self {
+    pub fn new(catnum: u8, ips: IpSweep, pf: PortType, negative: bool) -> Self {
         Trigger {
             catnum: catnum,
             ipsweep: ips,
             portfocus: pf,
+            negative: negative,
             curpf: PortType::NONE,
         }
     }
@@ -39,14 +42,17 @@ lazy_static! {
         let negative:bool;
         let portfocus: PortType;
         let ipsweep: IpSweep;
-        let trigger: Vec<Trigger> = Vec::new();
+        let mut trigger: Vec<Trigger> = Vec::new();
         let re = Regex::new(TRIGGER_REG).unwrap();
         for line in SCAN_TRIGGERS_RAW.iter() {
-            for cap in re.captures_iter(line) {
-                       
+            if let Some(cap) =  re.captures(line) {
+                let catnum: u8 = cap.get(1).unwrap().as_str().parse().unwrap();
+                let ips = ips_config_parser(cap.get(2).unwrap().as_str());
+                let negative =  negative_config_parser(cap.get(3));
+                let pf = pf_config_parser( cap.get(4).unwrap().as_str());
+                trigger.push(Trigger::new(catnum, ips, pf, negative));
             }
         }
-        
         trigger
     };
 }
@@ -57,6 +63,35 @@ lazy_static! {
         TrackerMap::new()
         )
     };
+}
+
+fn ips_config_parser(ips: &str) -> IpSweep {
+    match ips {
+        "narrow" | "low" | "small" | "bottom" => IpSweep::IPSweepNarrow,
+        "moderate" | "medium" | "middle" => IpSweep::IPSweepModerate,
+        "intense" | "wide" | "high" | "large" | "top" | "broad" => IpSweep::IPSweepBroad,
+        _ => IpSweep::IPSweepNone,
+
+    }
+}
+
+fn pf_config_parser(pf: &str) -> PortType {
+    match pf {
+        "service" => PortType::SERVICE,
+        "malware" => PortType::MALWARE,
+        "other" => PortType::OTHER,
+        "icmp" => PortType::ZERO,
+        "zero" => PortType::ZERO,
+        "generic" => PortType::GENERIC,
+        _ => PortType::NONE,
+    }
+}
+
+fn negative_config_parser(neg: Option<Match>) -> bool {
+    match neg {
+        Some(_) => true,
+        None => false,
+    }
 }
 
 lazy_static! {
