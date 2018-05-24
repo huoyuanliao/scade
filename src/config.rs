@@ -38,10 +38,6 @@ pub static MALWARE_PORTS_LIST: [Port; 4] = [53, 69, 137, 1434];
 
 lazy_static! {
     pub static ref TRIGGERS: Vec<Trigger> = {
-        let catnum: u8;
-        let negative:bool;
-        let portfocus: PortType;
-        let ipsweep: IpSweep;
         let mut trigger: Vec<Trigger> = Vec::new();
         let re = Regex::new(TRIGGER_REG).unwrap();
         for line in SCAN_TRIGGERS_RAW.iter() {
