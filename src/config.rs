@@ -10,31 +10,17 @@ use types::IpSweep;
 use types::TRIGGER_REG;
 use track::Tracker;
 
-type TrackerMap = HashMap<Ipv4Addr, Tracker>;
-pub struct Trigger {
-    catnum: u8,
-    ipsweep: IpSweep,
-    portfocus: PortType,
-    negative: bool,
-    curpf: PortType,
-}
-
-impl Trigger {
-    pub fn new(catnum: u8, ips: IpSweep, pf: PortType, negative: bool) -> Self {
-        Trigger {
-            catnum: catnum,
-            ipsweep: ips,
-            portfocus: pf,
-            negative: negative,
-            curpf: PortType::NONE,
-        }
-    }
-}
+static SCAN_TRIGGERS_RAW: [&str; 3] =
+    ["8=intense+malware", "5=intense+non-malware", "5=moderate+malware"];
 
 pub static SERVICE_PORTS_LIST: [Port; 26] = [21, 53, 42, 80, 135, 139, 445, 559, 1025, 1433, 2082,
                                              2100, 2745, 2535, 3127, 3306, 3410, 5000, 5554, 6101,
                                              6129, 10000, 11768, 15118, 27374, 65506];
 pub static MALWARE_PORTS_LIST: [Port; 4] = [53, 69, 137, 1434];
+
+pub static IP_SCANNED_MODERATE: usize = 5;
+pub static IP_SCANNED_HIGH: usize = 10;
+pub static SCANNED_SUPPRESS_TIME_WINDOW: usize = 120;
 
 lazy_static! {
     pub static ref TRIGGERS: Vec<Trigger> = {
@@ -59,6 +45,27 @@ lazy_static! {
         TrackerMap::new()
         )
     };
+}
+
+type TrackerMap = HashMap<Ipv4Addr, Tracker>;
+pub struct Trigger {
+    catnum: u8,
+    ipsweep: IpSweep,
+    portfocus: PortType,
+    negative: bool,
+    curpf: PortType,
+}
+
+impl Trigger {
+    pub fn new(catnum: u8, ips: IpSweep, pf: PortType, negative: bool) -> Self {
+        Trigger {
+            catnum: catnum,
+            ipsweep: ips,
+            portfocus: pf,
+            negative: negative,
+            curpf: PortType::NONE,
+        }
+    }
 }
 
 fn ips_config_parser(ips: &str) -> IpSweep {
@@ -94,6 +101,3 @@ lazy_static! {
         )
     };
 }
-
-static SCAN_TRIGGERS_RAW: [&str; 3] =
-    ["8=intense+malware", "5=intense+non-malware", "5=moderate+malware"];

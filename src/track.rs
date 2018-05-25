@@ -111,7 +111,7 @@ impl Tracker {
         self.__ip_pool_append(ip, port_type)
     }
 
-    pub fn get_ip_failcounts_amount(self) {
-        // return ip_failcounts amount
+    pub fn get_ip_failcounts_amount(&self) -> usize {
+        return self.ip_fail_counts.len();
     }
 }
