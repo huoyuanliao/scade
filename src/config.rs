@@ -84,10 +84,7 @@ fn pf_config_parser(pf: &str) -> PortType {
 }
 
 fn negative_config_parser(neg: Option<Match>) -> bool {
-    match neg {
-        Some(_) => true,
-        None => false,
-    }
+    neg.map_or(false, |_| true)
 }
 
 lazy_static! {
