@@ -39,7 +39,6 @@ fn evaluate_ipsweeper(tracker: &Tracker) -> IpSweep {
 fn evaluate_portsweeper(tracker: &Tracker) -> PortType {
     let mut pf = PortType::NONE;
 
-
     for i in 0..4 {
         if tracker.total_fail_counts[i] >= SCANNER_FOCUS_MINCOUNTS[i] {
             let mut is_modal = true;
@@ -65,7 +64,6 @@ fn evaluate_portsweeper(tracker: &Tracker) -> PortType {
                 };
                 break;
             }
-
         }
     }
     return pf;
