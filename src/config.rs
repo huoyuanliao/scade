@@ -18,9 +18,12 @@ pub static SERVICE_PORTS_LIST: [Port; 26] = [21, 53, 42, 80, 135, 139, 445, 559,
                                              6129, 10000, 11768, 15118, 27374, 65506];
 pub static MALWARE_PORTS_LIST: [Port; 4] = [53, 69, 137, 1434];
 
+pub static SCANNER_MODAL_DISTRIBUTIONS: [[usize; 4]; 4] =
+    [[4, 1, 1, 1], [1, 4, 1, 1], [1, 1, 4, 1], [0, 0, 0, 1]];
 pub static IP_SCANNED_MODERATE: usize = 5;
 pub static IP_SCANNED_HIGH: usize = 10;
 pub static SCANNED_SUPPRESS_TIME_WINDOW: usize = 120;
+pub static SCANNER_FOCUS_MINCOUNTS: [usize; 4] = [4, 4, 500, 1000];
 
 lazy_static! {
     pub static ref TRIGGERS: Vec<Trigger> = {

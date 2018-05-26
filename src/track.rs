@@ -11,7 +11,7 @@ use smport_list::MALWARE_PORTS;
 
 pub struct Tracker {
     tracker_ip: Ipv4Addr,
-    total_fail_counts: FailCounts,
+    pub total_fail_counts: FailCounts,
 
     ip_fail_counts: IpFailCounts,
     port_other_list: PortIpSet,

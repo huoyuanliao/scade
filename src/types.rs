@@ -4,7 +4,7 @@ use std::net::Ipv4Addr;
 
 pub type Port = u16;
 pub type PortSet = HashSet<Port>;
-pub type FailCounts = [u32; 4];
+pub type FailCounts = [usize; 4];
 pub type Protocol = u8;
 pub type PortIpSet = HashMap<Port, IpSet>;
 pub type IpSet = HashSet<Ipv4Addr>;
