@@ -9,6 +9,8 @@ use config::IP_SCANNED_MODERATE;
 use config::IP_SCANNED_HIGH;
 use config::SCANNER_FOCUS_MINCOUNTS;
 use config::SCANNER_MODAL_DISTRIBUTIONS;
+use config::TRIGGERS;
+use config::Trigger;
 
 pub fn inbound_scan(inner_ip: Ipv4Addr, outter_ip: Ipv4Addr, port: Port, proto: Protocol) {
 
@@ -18,11 +20,29 @@ pub fn inbound_scan(inner_ip: Ipv4Addr, outter_ip: Ipv4Addr, port: Port, proto: 
         .or_insert(Tracker::new(inner_ip));
 }
 
-pub fn inbound_alert_check(outter: Ipv4Addr) {
+pub fn inbound_alert_check<'a>(outter: Ipv4Addr) -> Option<&'a Trigger> {
     let inbound_map = INBOUND_TRACKER_MAP.lock().unwrap();
-    if let Some(ref tracer) = inbound_map.get(&outter) {
-        // do threshold check and alert
+    if let Some(tracer) = inbound_map.get(&outter) {
+        let ips = evaluate_ipsweeper(&tracer);
+        let pf = evaluate_portsweeper(&tracer);
+        if pf != PortType::NONE {
+            /*
+            for &mut trigger in &mut TRIGGERS.iter() {
+                if ips == trigger.ipsweep {
+                    if (trigger.negative  && trigger.portfocus == pf)  || 
+                        !trigger.negative && trigger.portfocus == pf
+                    {
+                        trigger.curpf = pf;
+                        return Some(trigger);
+                    } 
+                }
+            }
+            */
+            return None;
+        }
+        return None;
     }
+    return None;
 }
 
 fn evaluate_ipsweeper(tracker: &Tracker) -> IpSweep {

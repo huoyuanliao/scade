@@ -53,10 +53,10 @@ lazy_static! {
 type TrackerMap = HashMap<Ipv4Addr, Tracker>;
 pub struct Trigger {
     catnum: u8,
-    ipsweep: IpSweep,
-    portfocus: PortType,
-    negative: bool,
-    curpf: PortType,
+    pub ipsweep: IpSweep,
+    pub portfocus: PortType,
+    pub negative: bool,
+    pub curpf: PortType,
 }
 
 impl Trigger {
