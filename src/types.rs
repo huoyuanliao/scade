@@ -29,3 +29,24 @@ pub enum IpSweep {
 }
 
 pub static TRIGGER_REG: &str = r"\s*(?:(\d+)=)?(\w+)\+(non-)?(\w+)\s*";
+
+#[derive(PartialEq)]
+pub struct Trigger {
+    catnum: u8,
+    pub ipsweep: IpSweep,
+    pub portfocus: PortType,
+    pub negative: bool,
+    pub curpf: PortType,
+}
+
+impl Trigger {
+    pub fn new(catnum: u8, ips: IpSweep, pf: PortType, negative: bool) -> Self {
+        Trigger {
+            catnum: catnum,
+            ipsweep: ips,
+            portfocus: pf,
+            negative: negative,
+            curpf: PortType::NONE,
+        }
+    }
+}

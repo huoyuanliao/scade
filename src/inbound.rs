@@ -4,13 +4,13 @@ use types::Port;
 use types::Protocol;
 use types::IpSweep;
 use types::PortType;
+use types::Trigger;
 use config::INBOUND_TRACKER_MAP;
 use config::IP_SCANNED_MODERATE;
 use config::IP_SCANNED_HIGH;
 use config::SCANNER_FOCUS_MINCOUNTS;
 use config::SCANNER_MODAL_DISTRIBUTIONS;
 use config::TRIGGERS;
-use config::Trigger;
 
 pub fn inbound_scan(inner_ip: Ipv4Addr, outter_ip: Ipv4Addr, port: Port, proto: Protocol) {
 
@@ -20,29 +20,27 @@ pub fn inbound_scan(inner_ip: Ipv4Addr, outter_ip: Ipv4Addr, port: Port, proto: 
         .or_insert(Tracker::new(inner_ip));
 }
 
-pub fn inbound_alert_check<'a>(outter: Ipv4Addr) -> Option<&'a Trigger> {
+pub fn inbound_alert_check<'a>(outter: Ipv4Addr) {
     let inbound_map = INBOUND_TRACKER_MAP.lock().unwrap();
-    if let Some(tracer) = inbound_map.get(&outter) {
-        let ips = evaluate_ipsweeper(&tracer);
-        let pf = evaluate_portsweeper(&tracer);
+    if let Some(tracker) = inbound_map.get(&outter) {
+        let ips = evaluate_ipsweeper(&tracker);
+        let pf = evaluate_portsweeper(&tracker);
         if pf != PortType::NONE {
-            /*
-            for &mut trigger in &mut TRIGGERS.iter() {
+
+            for trigger in TRIGGERS.iter() {
                 if ips == trigger.ipsweep {
-                    if (trigger.negative  && trigger.portfocus == pf)  || 
-                        !trigger.negative && trigger.portfocus == pf
-                    {
-                        trigger.curpf = pf;
-                        return Some(trigger);
-                    } 
+                    if (trigger.negative && trigger.portfocus == pf) ||
+                       !trigger.negative && trigger.portfocus == pf {
+                        // trigger.curpf = pf;
+                        // if tracker.trigger != Some(trigger) {
+                        //    tracker.trigger = Some(trigger);
+                        // }
+                    }
                 }
             }
-            */
-            return None;
+
         }
-        return None;
     }
-    return None;
 }
 
 fn evaluate_ipsweeper(tracker: &Tracker) -> IpSweep {

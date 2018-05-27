@@ -6,6 +6,7 @@ use types::IpSet;
 use types::IpFailCounts;
 use types::Protocol;
 use types::PortType;
+use types::Trigger;
 use smport_list::SERVICE_PORTS;
 use smport_list::MALWARE_PORTS;
 
@@ -19,6 +20,7 @@ pub struct Tracker {
 
     tcp_sm_list: PortIpSet,
     udp_sm_list: PortIpSet,
+    pub trigger: Option<&'static Trigger>,
 }
 
 fn __get_port_type(port: Port, proto: Protocol) -> PortType {
@@ -51,6 +53,7 @@ impl Tracker {
             port_other_list: PortIpSet::new(),
             tcp_sm_list: PortIpSet::new(),
             udp_sm_list: PortIpSet::new(),
+            trigger: None,
         }
     }
 

@@ -8,6 +8,7 @@ use types::Port;
 use types::PortType;
 use types::IpSweep;
 use types::TRIGGER_REG;
+use types::Trigger;
 use track::Tracker;
 
 static SCAN_TRIGGERS_RAW: [&str; 3] =
@@ -51,25 +52,7 @@ lazy_static! {
 }
 
 type TrackerMap = HashMap<Ipv4Addr, Tracker>;
-pub struct Trigger {
-    catnum: u8,
-    pub ipsweep: IpSweep,
-    pub portfocus: PortType,
-    pub negative: bool,
-    pub curpf: PortType,
-}
 
-impl Trigger {
-    pub fn new(catnum: u8, ips: IpSweep, pf: PortType, negative: bool) -> Self {
-        Trigger {
-            catnum: catnum,
-            ipsweep: ips,
-            portfocus: pf,
-            negative: negative,
-            curpf: PortType::NONE,
-        }
-    }
-}
 
 fn ips_config_parser(ips: &str) -> IpSweep {
     match ips {
