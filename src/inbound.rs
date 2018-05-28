@@ -39,11 +39,7 @@ pub fn inbound_alert_check<'a>(outter: Ipv4Addr) {
                         trigger.curpf = pf;
                         if tracker.trigger == Some(*trigger) {
                             tracker.trigger = Some(Trigger {
-                                catnum: trigger.catnum,
-                                ipsweep: trigger.ipsweep,
-                                portfocus: trigger.portfocus,
-                                negative: trigger.negative,
-                                curpf: PortType::NONE,
+                                ..*trigger
                             });
                         }
                     }
