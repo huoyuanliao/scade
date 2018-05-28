@@ -31,7 +31,6 @@ pub fn inbound_alert_check<'a>(outter: Ipv4Addr) {
         let ips = evaluate_ipsweeper(&tracker);
         let pf = evaluate_portsweeper(&tracker);
         if pf != PortType::NONE {
-
             for trigger in TRIGGERS.lock().unwrap().iter_mut() {
                 if ips == trigger.ipsweep {
                     if (trigger.negative && trigger.portfocus == pf) ||
