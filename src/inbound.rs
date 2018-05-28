@@ -1,4 +1,5 @@
 use std::net::Ipv4Addr;
+use std::sync::Mutex;
 use track::Tracker;
 use types::Port;
 use types::Protocol;
@@ -16,25 +17,35 @@ pub fn inbound_scan(inner_ip: Ipv4Addr, outter_ip: Ipv4Addr, port: Port, proto: 
 
     let mut inbound_map = INBOUND_TRACKER_MAP.lock().unwrap();
     inbound_map.entry(outter_ip)
-        .and_modify(|e| e.track_scanned(outter_ip, port, proto))
-        .or_insert(Tracker::new(inner_ip));
+        .and_modify(|e| {
+            let mut entry = e.lock().unwrap();
+            entry.track_scanned(outter_ip, port, proto)
+        })
+        .or_insert(Mutex::new(Tracker::new(inner_ip)));
 }
 
 pub fn inbound_alert_check<'a>(outter: Ipv4Addr) {
     let inbound_map = INBOUND_TRACKER_MAP.lock().unwrap();
     if let Some(tracker) = inbound_map.get(&outter) {
+        let mut tracker = tracker.lock().unwrap();
         let ips = evaluate_ipsweeper(&tracker);
         let pf = evaluate_portsweeper(&tracker);
         if pf != PortType::NONE {
 
-            for trigger in TRIGGERS.iter() {
+            for trigger in TRIGGERS.lock().unwrap().iter_mut() {
                 if ips == trigger.ipsweep {
                     if (trigger.negative && trigger.portfocus == pf) ||
                        !trigger.negative && trigger.portfocus == pf {
-                        // trigger.curpf = pf;
-                        // if tracker.trigger != Some(trigger) {
-                        //    tracker.trigger = Some(trigger);
-                        // }
+                        trigger.curpf = pf;
+                        if tracker.trigger == Some(*trigger) {
+                            tracker.trigger = Some(Trigger {
+                                catnum: trigger.catnum,
+                                ipsweep: trigger.ipsweep,
+                                portfocus: trigger.portfocus,
+                                negative: trigger.negative,
+                                curpf: PortType::NONE,
+                            });
+                        }
                     }
                 }
             }

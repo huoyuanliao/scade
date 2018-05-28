@@ -27,7 +27,7 @@ pub static SCANNED_SUPPRESS_TIME_WINDOW: usize = 120;
 pub static SCANNER_FOCUS_MINCOUNTS: [usize; 4] = [4, 4, 500, 1000];
 
 lazy_static! {
-    pub static ref TRIGGERS: Vec<Trigger> = {
+    pub static ref TRIGGERS: Mutex<Vec<Trigger>> = {
         let mut trigger: Vec<Trigger> = Vec::new();
         let re = Regex::new(TRIGGER_REG).unwrap();
         for line in SCAN_TRIGGERS_RAW.iter() {
@@ -39,7 +39,7 @@ lazy_static! {
                 trigger.push(Trigger::new(catnum, ips, pf, negative));
             }
         }
-        trigger
+        Mutex::new(trigger)
     };
 }
 
@@ -51,7 +51,7 @@ lazy_static! {
     };
 }
 
-type TrackerMap = HashMap<Ipv4Addr, Tracker>;
+type TrackerMap = HashMap<Ipv4Addr, Mutex<Tracker>>;
 
 
 fn ips_config_parser(ips: &str) -> IpSweep {

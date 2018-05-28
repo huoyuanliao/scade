@@ -32,7 +32,7 @@ pub static TRIGGER_REG: &str = r"\s*(?:(\d+)=)?(\w+)\+(non-)?(\w+)\s*";
 
 #[derive(PartialEq)]
 pub struct Trigger {
-    catnum: u8,
+    pub catnum: u8,
     pub ipsweep: IpSweep,
     pub portfocus: PortType,
     pub negative: bool,

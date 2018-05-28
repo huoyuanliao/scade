@@ -20,7 +20,7 @@ pub struct Tracker {
 
     tcp_sm_list: PortIpSet,
     udp_sm_list: PortIpSet,
-    pub trigger: Option<&'static Trigger>,
+    pub trigger: Option<Trigger>,
 }
 
 fn __get_port_type(port: Port, proto: Protocol) -> PortType {
