@@ -37,10 +37,8 @@ pub fn inbound_alert_check<'a>(outter: Ipv4Addr) {
                     if (trigger.negative && trigger.portfocus == pf) ||
                        !trigger.negative && trigger.portfocus == pf {
                         trigger.curpf = pf;
-                        if tracker.trigger == Some(*trigger) {
-                            tracker.trigger = Some(Trigger {
-                                ..*trigger
-                            });
+                        if tracker.trigger == Some(trigger.clone()) {
+                            tracker.trigger = Some(Trigger { ..*trigger });
                         }
                     }
                 }

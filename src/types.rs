@@ -30,7 +30,7 @@ pub enum IpSweep {
 
 pub static TRIGGER_REG: &str = r"\s*(?:(\d+)=)?(\w+)\+(non-)?(\w+)\s*";
 
-#[derive(PartialEq)]
+#[derive(Copy, Clone, PartialEq)]
 pub struct Trigger {
     pub catnum: u8,
     pub ipsweep: IpSweep,
