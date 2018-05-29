@@ -24,7 +24,7 @@ pub fn inbound_scan(inner_ip: Ipv4Addr, outter_ip: Ipv4Addr, port: Port, proto: 
         .or_insert(Mutex::new(Tracker::new(inner_ip)));
 }
 
-pub fn inbound_alert_check<'a>(outter: Ipv4Addr) {
+pub fn inbound_alert_check(outter: Ipv4Addr) {
     let inbound_map = INBOUND_TRACKER_MAP.lock().unwrap();
     if let Some(tracker) = inbound_map.get(&outter) {
         let mut tracker = tracker.lock().unwrap();

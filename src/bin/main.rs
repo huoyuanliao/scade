@@ -87,7 +87,10 @@ fn process_packet(p: pcap::Packet) {
 fn main() {
     let pcap_file = Path::new("./pcaps/botnet-capture-20110810-neris.pcap");
     let mut cap = Capture::from_file(pcap_file).unwrap();
+    let mut count = 0;
     while let Ok(packet) = cap.next() {
         process_packet(packet);
+        count += 1;
     }
+    println!("parser packet:{}", count);
 }
