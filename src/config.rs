@@ -4,12 +4,12 @@ use regex::Match;
 use std::sync::Mutex;
 use std::collections::HashMap;
 use std::net::Ipv4Addr;
-use types::Port;
-use types::PortType;
-use types::IpSweep;
-use types::TRIGGER_REG;
-use types::Trigger;
-use track::Tracker;
+use crate::types::Port;
+use crate::types::PortType;
+use crate::types::IpSweep;
+use crate::types::TRIGGER_REG;
+use crate::types::Trigger;
+use crate::track::Tracker;
 
 static SCAN_TRIGGERS_RAW: [&str; 3] =
     ["8=intense+malware", "5=intense+non-malware", "5=moderate+malware"];

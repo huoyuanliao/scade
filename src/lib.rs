@@ -1,3 +1,4 @@
+#![feature(rust_2018_preview)]
 #![allow(unused_variables)]
 #![allow(dead_code)]
 extern crate pnet;
@@ -12,9 +13,9 @@ mod config;
 mod inbound;
 mod outbound;
 mod track;
-pub use types::Port;
-pub use inbound::inbound_scan;
-pub use inbound::inbound_alert_check;
+pub use crate::types::Port;
+pub use crate::inbound::inbound_scan;
+pub use crate::inbound::inbound_alert_check;
 
-pub use outbound::outbound_scan;
-pub use outbound::outbound_alert_check;
+pub use crate::outbound::outbound_scan;
+pub use crate::outbound::outbound_alert_check;

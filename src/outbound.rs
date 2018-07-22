@@ -1,9 +1,9 @@
 use std::net::Ipv4Addr;
 use std::sync::Mutex;
-use track::Tracker;
-use types::Port;
-use types::Protocol;
-use config::OUTBOUND_TRACKER_MAP;
+use crate::track::Tracker;
+use crate::types::Port;
+use crate::types::Protocol;
+use crate::config::OUTBOUND_TRACKER_MAP;
 
 pub fn outbound_scan(inner_ip: Ipv4Addr, outter_ip: Ipv4Addr, port: Port, proto: Protocol) {
 

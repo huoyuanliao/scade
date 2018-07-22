@@ -1,14 +1,14 @@
 use std::net::Ipv4Addr;
-use types::FailCounts;
-use types::PortIpSet;
-use types::Port;
-use types::IpSet;
-use types::IpFailCounts;
-use types::Protocol;
-use types::PortType;
-use types::Trigger;
-use smport_list::SERVICE_PORTS;
-use smport_list::MALWARE_PORTS;
+use crate::types::FailCounts;
+use crate::types::PortIpSet;
+use crate::types::Port;
+use crate::types::IpSet;
+use crate::types::IpFailCounts;
+use crate::types::Protocol;
+use crate::types::PortType;
+use crate::types::Trigger;
+use crate::smport_list::SERVICE_PORTS;
+use crate::smport_list::MALWARE_PORTS;
 
 pub struct Tracker {
     tracker_ip: Ipv4Addr,

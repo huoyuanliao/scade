@@ -1,6 +1,6 @@
-use types::PortSet;
-use config::SERVICE_PORTS_LIST;
-use config::MALWARE_PORTS_LIST;
+use crate::types::PortSet;
+use crate::config::SERVICE_PORTS_LIST;
+use crate::config::MALWARE_PORTS_LIST;
 
 lazy_static! {
     pub static ref SERVICE_PORTS: PortSet = {
